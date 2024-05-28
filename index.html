@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hours into Decimal Converter</title>
+</head>
+
+<body>
+    <h1>Hours into Decimal Converter</h1>
+    <form id="converter-form">
+        <label for="hours">Enter hours (HH.MM):</label>
+        <input type="text" name="hours" id="hours" required>
+        <input type="submit" value="Convert">
+    </form>
+    <p id="answer"></p>
+
+    <script>
+        const form = document.querySelector('#converter-form');
+        const answer = document.querySelector('#answer');
+
+        function convertToDecimalHours(timeString) {
+            // Split the input string into hours and minutes
+            const [hours, minutes] = timeString.split('.').map(Number);
+
+            // Convert minutes to a fraction of an hour and add to hours
+            const decimalHours = hours + (minutes / 60);
+
+            return decimalHours;
+        }
+
+        function isValidTimeFormat(timeString) {
+            // Regular expression to check if the format is HH.MM
+            const timeFormat = /^\d{1,2}\.\d{2}$/;
+            return timeFormat.test(timeString);
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const hours = form.hours.value;
+
+            if (!isValidTimeFormat(hours)) {
+                answer.textContent = 'Invalid format! Please enter time in HH.MM format.';
+                return;
+            }
+
+            const [hoursPart, minutesPart] = hours.split('.').map(Number);
+            if (minutesPart >= 60) {
+                answer.textContent = 'Invalid minutes! Minutes should be less than 60.';
+                return;
+            }
+
+            const result = convertToDecimalHours(hours);
+            answer.textContent = `Decimal hours: ${result.toFixed(2)}`;
+        });
+    </script>
+</body>
+
+</html>
